@@ -1,0 +1,66 @@
+version: "3.0"
+
+services:
+  db:
+  #   container_name: mongo
+  #   image: mongo:7.0.11
+  #   restart: always
+  #   ports:
+  #     - "9202:27017"
+  #   volumes:
+  #     - ./dbData:/data/db
+  #   networks:
+  #     - task_elevate_net
+
+  # server:
+  #   container_name: server
+  #   image: node:20.14.0
+  #   restart: always
+  #   volumes:
+  #     - ./server:/usr/src/app
+  #   networks:
+  #     - task_elevate_net
+  #   working_dir: /usr/src/app
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       mkdir -p /usr/src/app
+  #       mkdir -p /usr/src/app/data
+  #       cd /usr/src/app
+  #       npm install
+  #       npm start
+  #   ports:
+  #     - "9201:3000"
+  #   depends_on:
+  #     - db
+
+  # web:
+  #   container_name: client
+  #   image: node:20.14.0
+  #   restart: always
+  #   volumes:
+  #     - ./client:/app
+  #   networks:
+  #     - task_elevate_net
+  #   working_dir: /app
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       mkdir -p /app
+  #       cd /app
+  #       npm install
+  #       npm start
+  #   ports:
+  #     - "9200:4200"
+  #   depends_on:
+  #     - server
+
+networks:
+  task_elevate_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 7.2.0.0/24
+          gateway: 7.2.0.1
