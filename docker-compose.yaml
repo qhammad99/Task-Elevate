@@ -2,38 +2,37 @@ version: "3.0"
 
 services:
   db:
-  #   container_name: mongo
-  #   image: mongo:7.0.11
-  #   restart: always
-  #   ports:
-  #     - "9202:27017"
-  #   volumes:
-  #     - ./dbData:/data/db
-  #   networks:
-  #     - task_elevate_net
+    container_name: task-elevate-db
+    image: mongo:7.0.11
+    restart: always
+    ports:
+      - "9002:27017"
+    volumes:
+      - ./dbData:/data/db
+    networks:
+      - task_elevate_net
 
-  # server:
-  #   container_name: server
-  #   image: node:20.14.0
-  #   restart: always
-  #   volumes:
-  #     - ./server:/usr/src/app
-  #   networks:
-  #     - task_elevate_net
-  #   working_dir: /usr/src/app
-  #   command:
-  #     - /bin/sh
-  #     - -c
-  #     - |
-  #       mkdir -p /usr/src/app
-  #       mkdir -p /usr/src/app/data
-  #       cd /usr/src/app
-  #       npm install
-  #       npm start
-  #   ports:
-  #     - "9201:3000"
-  #   depends_on:
-  #     - db
+  server:
+    container_name: task-elevate-server
+    image: node:20.14.0
+    restart: always
+    volumes:
+      - ./server:/usr/src/app
+    networks:
+      - task_elevate_net
+    working_dir: /usr/src/app
+    command:
+      - /bin/sh
+      - -c
+      - |
+        mkdir -p /usr/src/app
+        cd /usr/src/app
+        npm install
+        npm run dev
+    ports:
+      - "9001:9001"
+    depends_on:
+      - db
 
   # web:
   #   container_name: client
