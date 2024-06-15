@@ -26,6 +26,8 @@ app.use(cookieParser());
 // routes
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/root'));
+app.use('/users', require('./routes/userRoutes'));
+app.use('/tasks', require('./routes/taskRoutes'));
 
 // 404 route,, must be at end
 app.all('*', (req, res) => {
