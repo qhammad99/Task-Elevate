@@ -2,13 +2,19 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const { logger } = require('./middleware/logger');
+const mongoose = require('mongoose');
+
+const { logger, logEvents } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 const cookieParser = require('cookie-parser');
 const cors_options = require('./config/corsOptions');
+const connectDB = require('./config/dbCon');
 
 const app = express();
 const PORT = process.env.PORT || 9001;
+
+// connection call with monogo db
+connectDB();
 
 // request middleware calls
 app.use(logger);
@@ -35,5 +41,15 @@ app.all('*', (req, res) => {
 // response middleware calls
 app.use(errorHandler);
 
-// start server to listen
-app.listen(PORT, () => console.log(`Server running on http://127.0.0.1:${PORT}`));
+// first establish connection with mongo then start listen..
+mongoose.connection.once('open', () => {
+    console.log('Mongo DB connected..');  
+    // start server to listen
+    app.listen(PORT, () => console.log(`Server running on http://127.0.0.1:${PORT}`));
+})
+
+// mongoose connection error handling
+mongoose.connection.on('error', err => {
+    console.log(`[Mongo Connection Error]: ${err}`);
+    logEvents(`${new Date()}: mongo connection error`, 'mongo_error.log');
+})
