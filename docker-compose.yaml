@@ -34,27 +34,27 @@ services:
     depends_on:
       - db
 
-  # web:
-  #   container_name: client
-  #   image: node:20.14.0
-  #   restart: always
-  #   volumes:
-  #     - ./client:/app
-  #   networks:
-  #     - task_elevate_net
-  #   working_dir: /app
-  #   command:
-  #     - /bin/sh
-  #     - -c
-  #     - |
-  #       mkdir -p /app
-  #       cd /app
-  #       npm install
-  #       npm start
-  #   ports:
-  #     - "9200:4200"
-  #   depends_on:
-  #     - server
+  client:
+    container_name: task-elevate-client
+    image: node:20.14.0
+    restart: always
+    volumes:
+      - ./client:/app
+    networks:
+      - task_elevate_net
+    working_dir: /app
+    command:
+      - /bin/sh
+      - -c
+      - |
+        mkdir -p /app
+        cd /app
+        npm install
+        npm start
+    ports:
+      - "9003:3000"
+    depends_on:
+      - server
 
 networks:
   task_elevate_net:
