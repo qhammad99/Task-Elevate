@@ -1,9 +1,49 @@
-import React from 'react'
+import { useGetTasksQuery } from "./tasksApiSlice";
+import Tasks from "./Task";
 
 const TaskList = () => {
-  return (
-    <h1>TaskList</h1>
-  )
-}
+    const {
+        data: Task,
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetTasksQuery();
 
-export default TaskList
+    let content
+
+    if (isLoading) content = <p>Loading...</p>
+
+    if (isError) {
+        content = <p className="errmsg">{error?.data?.message}</p>
+    }
+
+    if (isSuccess) {
+        const { ids } = Task
+
+        const tableContent = ids?.length
+            ? ids.map(taskId => <Tasks key={taskId} taskId={taskId} />)
+            : null
+
+        content = (
+            <table className="table table--notes">
+                <thead className="table__thead">
+                    <tr>
+                        <th scope="col" className="table__th note__status">Username</th>
+                        <th scope="col" className="table__th note__created">Created</th>
+                        <th scope="col" className="table__th note__updated">Updated</th>
+                        <th scope="col" className="table__th note__title">Title</th>
+                        <th scope="col" className="table__th note__username">Owner</th>
+                        <th scope="col" className="table__th note__edit">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tableContent}
+                </tbody>
+            </table>
+        )
+    }
+
+    return content
+}
+export default TaskList;
