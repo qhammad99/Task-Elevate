@@ -17,7 +17,6 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
             validateStatus: (response, result) => {
                 return response.status === 200 && !result.isError
             },
-            keepUnusedDataFor: 5,
             transformResponse: responseData => {
                 const loadedTasks = responseData.map(task => {
                     task.id = task._id
@@ -34,11 +33,48 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
                 } else return [{ type: 'Tasks', id: 'LIST' }]
             }
         }),
+        addNewTask: builder.mutation({
+            query: initialNote => ({
+                url: '/tasks',
+                method: 'POST',
+                body: {
+                    ...initialNote,
+                }
+            }),
+            invalidatesTags: [
+                { type: 'Tasks', id: "LIST" }
+            ]
+        }),
+        updateTask: builder.mutation({
+            query: initialNote => ({
+                url: '/tasks',
+                method: 'PATCH',
+                body: {
+                    ...initialNote,
+                }
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Tasks', id: arg.id }
+            ]
+        }),
+        deleteTask: builder.mutation({
+            query: ({ id }) => ({
+                url: `/tasks`,
+                method: 'DELETE',
+                body: { id }
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Tasks', id: arg.id }
+            ]
+        }),
     }),
 })
 
 export const {
     useGetTasksQuery,
+    useAddNewTaskMutation,
+    useUpdateTaskMutation,
+    useDeleteTaskMutation,
 } = tasksApiSlice
 
 // returns the query result object
@@ -55,5 +91,5 @@ export const {
     selectAll: selectAllTasks,
     selectById: selectTasksById,
     selectIds: selectTaskIds
-    // Pass in a selector that returns the notes slice of state
+    // Pass in a selector that returns the tasks slice of state
 } = tasksAdapter.getSelectors(state => selectTasksData(state) ?? initialState)
