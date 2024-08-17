@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const apiSlice = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:9001' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:9001/' }),
     tagTypes: ['Tasks', 'User'],
     endpoints: builder => ({})
 });

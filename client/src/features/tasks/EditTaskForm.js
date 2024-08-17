@@ -32,7 +32,7 @@ const EditTaskForm = ({ note, users }) => {
             setTitle('')
             setText('')
             setUserId('')
-            navigate('/dash/notes')
+            navigate('/dash/tasks')
         }
 
     }, [isSuccess, isDelSuccess, navigate])

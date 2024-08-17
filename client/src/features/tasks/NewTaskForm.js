@@ -24,7 +24,7 @@ const NewTaskForm = ({ users }) => {
             setTitle('')
             setText('')
             setUserId('')
-            navigate('/dash/notes')
+            navigate('/dash/tasks')
         }
     }, [isSuccess, navigate])
 
