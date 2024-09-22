@@ -3,7 +3,7 @@ const router = express.Router()
 const notesController = require('../controllers/taskController')
 const verifyJWT = require('../middleware/verifyJWT')
 
-// router.use(verifyJWT)
+router.use(verifyJWT)
 
 router.route('/')
     .get(notesController.getAllTasks)

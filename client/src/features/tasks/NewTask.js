@@ -5,7 +5,9 @@ import NewTaskForm from './NewTaskForm'
 const NewTask = () => {
     const users = useSelector(selectAllUsers)
 
-    const content = users ? <NewTaskForm users={users} /> : <p>Loading...</p>
+    if (!users?.length) return <p>Not Currently Available</p>
+
+    const content = <NewTaskForm users={users} />
 
     return content
 }
