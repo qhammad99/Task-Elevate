@@ -12,29 +12,33 @@ import NewUserForm from "./features/users/NewUserForm";
 import NewTask from "./features/tasks/NewTask";
 import Prefetch from "./features/auth/Prefetch";
 
+import PersistLogin from './features/auth/PersistLogin';
+
 function App() {
   return (
     <Routes>
-      <Route path = '/' element = {<Layout />}>
-        <Route index element = {<Public />} />
-        <Route path = 'login' element = {<Login />} />
+      <Route path='/' element={<Layout />}>
+        <Route index element={<Public />} />
+        <Route path='login' element={<Login />} />
 
-        <Route element={<Prefetch />}>
-          <Route path = 'dash' element = {<Dashboard />}>
-            <Route index element={<Welcome />} />
+        <Route element={<PersistLogin />}>
+          <Route element={<Prefetch />}>
+            <Route path='dash' element={<Dashboard />}>
+              <Route index element={<Welcome />} />
 
-            <Route path="users">
-              <Route index element={<UsersList />} />
-              <Route path=":id" element={<EditUser />} />
-              <Route path="new" element={<NewUserForm />} />
+              <Route path="users">
+                <Route index element={<UsersList />} />
+                <Route path=":id" element={<EditUser />} />
+                <Route path="new" element={<NewUserForm />} />
+              </Route>
+
+              <Route path="tasks">
+                <Route index element={<TaskList />} />
+                <Route path=":id" element={<EditTask />} />
+                <Route path="new" element={<NewTask />} />
+              </Route>
+
             </Route>
-
-            <Route path="tasks">
-              <Route index element={<TaskList />} />
-              <Route path=":id" element={<EditTask />} />
-              <Route path="new" element={<NewTask />} />
-            </Route>
-
           </Route>
         </Route>
 
