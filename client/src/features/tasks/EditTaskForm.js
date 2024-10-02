@@ -3,8 +3,11 @@ import { useUpdateTaskMutation, useDeleteTaskMutation } from "./tasksApiSlice"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import useAuth from "../../hooks/useAuth"
 
 const EditTaskForm = ({ note, users }) => {
+
+    const { isManager, isAdmin } = useAuth()
 
     const [updateNote, {
         isLoading,
@@ -67,6 +70,19 @@ const EditTaskForm = ({ note, users }) => {
         )
     })
 
+    let deleteButton = null
+    if (isManager || isAdmin) {
+        deleteButton = (
+            <button
+                className="icon-button"
+                title="Delete"
+                onClick={onDeleteNoteClicked}
+            >
+                <FontAwesomeIcon icon={faTrashCan} />
+            </button>
+        )
+    }
+
     const errClass = (isError || isDelError) ? "errmsg" : "offscreen"
     const validTitleClass = !title ? "form__input--incomplete" : ''
     const validTextClass = !text ? "form__input--incomplete" : ''
@@ -79,7 +95,7 @@ const EditTaskForm = ({ note, users }) => {
 
             <form className="form" onSubmit={e => e.preventDefault()}>
                 <div className="form__title-row">
-                    <h2>Edit Note #{note.ticket}</h2>
+                    <h2>Edit Task #{note.ticket}</h2>
                     <div className="form__action-buttons">
                         <button
                             className="icon-button"
@@ -89,13 +105,7 @@ const EditTaskForm = ({ note, users }) => {
                         >
                             <FontAwesomeIcon icon={faSave} />
                         </button>
-                        <button
-                            className="icon-button"
-                            title="Delete"
-                            onClick={onDeleteNoteClicked}
-                        >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </button>
+                        {deleteButton}
                     </div>
                 </div>
                 <label className="form__label" htmlFor="note-title">

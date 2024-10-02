@@ -1,7 +1,10 @@
 import { useGetTasksQuery } from "./tasksApiSlice";
 import Tasks from "./Task";
+import useAuth from "../../hooks/useAuth"
 
 const TaskList = () => {
+    const { username, isManager, isAdmin } = useAuth()
+
     const {
         data: Task,
         isLoading,
@@ -23,21 +26,26 @@ const TaskList = () => {
     }
 
     if (isSuccess) {
-        const { ids } = Task
+        const { ids, entities } = Task
 
-        const tableContent = ids?.length
-            ? ids.map(taskId => <Tasks key={taskId} taskId={taskId} />)
-            : null
+        let filteredIds
+        if (isManager || isAdmin) {
+            filteredIds = [...ids]
+        } else {
+            filteredIds = ids.filter(noteId => entities[noteId].username === username)
+        }
+
+        const tableContent = ids?.length && filteredIds.map(taskId => <Tasks key={taskId} taskId={taskId} />)
 
         content = (
             <table className="table table--notes">
                 <thead className="table__thead">
                     <tr>
-                        <th scope="col" className="table__th note__status">Username</th>
+                        <th scope="col" className="table__th note__status">Status</th>
                         <th scope="col" className="table__th note__created">Created</th>
                         <th scope="col" className="table__th note__updated">Updated</th>
                         <th scope="col" className="table__th note__title">Title</th>
-                        <th scope="col" className="table__th note__username">Owner</th>
+                        <th scope="col" className="table__th note__username">Username</th>
                         <th scope="col" className="table__th note__edit">Edit</th>
                     </tr>
                 </thead>
